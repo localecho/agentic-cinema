@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ASCII Cinema — a television station</title>
+<meta name="description" content="A ten-channel television station broadcasting 102 silent films rendered as ASCII characters. Tune in; it is already running.">
+<link rel="stylesheet" href="css/theatre.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b0a09'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%23f0a830' font-family='monospace'%3E%E2%96%92%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- The power-on gate. Browsers block audio until a real gesture, so the
+     gesture is designed in rather than worked around: nothing plays until
+     someone turns the set on. -->
+<div id="poweron" class="poweron">
+  <div class="po-inner">
+    <div class="po-mark">▒▒▒</div>
+    <h1>ASCII CINEMA</h1>
+    <p class="po-sub">Ten channels · 102 films · 7,025 frames<br>
+      Broadcasting continuously since 1902</p>
+    <button id="tune" class="po-btn">Turn the set on</button>
+    <p class="po-fine">Sound comes on with the picture. Press M to mute.</p>
+  </div>
+</div>
+
+<div class="set" id="set" hidden>
+
+  <header class="marquee">
+    <div class="ident">
+      <span class="chno" id="m-chno">01</span>
+      <span class="chname" id="m-chname">THE ALL NIGHT</span>
+      <span class="chtag" id="m-chtag"></span>
+    </div>
+    <div class="marq-right">
+      <span class="onair" id="m-onair">● ON AIR</span>
+      <span class="clock" id="m-clock">--:--:--</span>
+    </div>
+  </header>
+
+  <main class="body">
+
+    <div class="screencol">
+      <div class="screen" id="screen">
+        <pre id="canvas" aria-live="off"
+             aria-label="ASCII rendering of the film now broadcasting"></pre>
+        <video id="vchan" hidden muted playsinline
+               aria-label="CV LAB: computer-vision subject/background split, real video"></video>
+        <div class="bug" id="bug">01</div>
+        <div class="cue-mark" id="cue" data-show="0" aria-hidden="true"></div>
+        <div class="tuning" id="tuning" hidden>TUNING…</div>
+        <!-- The velvet. Covers only the PICTURE, never the marquee or dial:
+             a theatre drapes the screen, not the lobby. Closed by default;
+             JS opens them and hides the rig between wipes. -->
+        <div class="curtains" id="curtains" hidden aria-hidden="true">
+          <div class="curtain cl"></div>
+          <div class="curtain cr"></div>
+          <div class="valance"></div>
+        </div>
+      </div>
+
+      <div class="undercarriage">
+        <div class="nownext">
+          <div class="now">
+            <span class="lbl">Now</span>
+            <b id="n-title">—</b><span class="yr" id="n-year"></span>
+            <span class="prog" id="n-prog"></span>
+          </div>
+          <div class="next">
+            <span class="lbl">Next</span>
+            <b id="x-title">—</b>
+          </div>
+        </div>
+        <div class="progress"><i id="n-bar"></i></div>
+        <p class="hook" id="n-hook"></p>
+        <dl class="meta">
+          <dt>Source</dt><dd id="n-src"></dd>
+          <dt>Fidelity</dt><dd id="n-fid"></dd>
+        </dl>
+      </div>
+    </div>
+
+    <aside class="dial" id="dial" aria-label="Channel dial"></aside>
+
+  </main>
+
+  <footer class="controls">
+    <div class="keys">
+      <kbd>1</kbd>–<kbd>9</kbd><kbd>0</kbd> channel ·
+      <kbd>↑</kbd><kbd>↓</kbd> tune (reaches CH 00, LIVE) ·
+      <kbd>G</kbd> guide ·
+      <kbd>F</kbd> full ·
+      <kbd>M</kbd> mute
+    </div>
+    <div class="keys right">
+      <button id="btn-guide" class="tbtn">Guide</button>
+      <button id="btn-full" class="tbtn" aria-pressed="false">Full</button>
+      <button id="btn-mute" class="tbtn" aria-pressed="false">Sound on</button>
+    </div>
+  </footer>
+</div>
+
+<!-- The guide: all 102 stills at once. Its own overlay so the broadcast
+     underneath never stops. -->
+<div class="guide" id="guide" hidden>
+  <div class="guide-head">
+    <h2>Programme guide</h2>
+    <span class="sub">one still per film · click to tune to its channel ·
+      tile colour is the film's own measured mean</span>
+    <button id="guide-close" class="tbtn">Close</button>
+  </div>
+  <div class="wall" id="wall"></div>
+</div>
+
+<!-- Vercel Analytics, vanilla-JS form (no bundler in this project): window.va
+     queues calls until the real script loads, so theatre.js's track() calls
+     never have to know whether it has arrived yet. -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script type="module" src="js/theatre.js"></script>
+<noscript>
+  <p style="padding:24px;font-family:monospace;color:#e9e3d6">
+    This is a television station; it needs JavaScript to run the transmitter.
+  </p>
+</noscript>
+</body>
+</html>
