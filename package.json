@@ -1,0 +1,9 @@
+{
+  "name": "agentic-cinema",
+  "private": true,
+  "type": "module",
+  "description": "Test runner config for the pure scheduler/telemetry logic under web/.",
+  "scripts": {
+    "test": "node --test"
+  }
+}
